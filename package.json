@@ -1,0 +1,45 @@
+{
+  "name": "task_management",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "start": "vite preview",
+    "build": "tsc && vite build",
+    "lint": "eslint \"src/**/*.{ts,tsx}\"",
+    "lint:fix": "eslint --fix \"src/**/*.{ts,tsx}\"",
+    "prettier": "prettier --write \"src/**/*.{ts,tsx}\"",
+    "rm:all": "rm -rf node_modules .next out dist build",
+    "re:start": "pnpm rm:all && pnpm install && pnpm dev",
+    "re:build": "pnpm rm:all && pnpm install && pnpm build",
+    "re:build-npm": "pnpm run rm:all && pnpm install && pnpm run build",
+    "dev:host": "vite --host"
+  },
+  "dependencies": {
+    "@ant-design/icons": "^5.5.1",
+    "antd": "^5.21.2",
+    "autoprefixer": "^10.4.20",
+    "axios": "^1.7.7",
+    "postcss-cli": "^11.0.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-router-dom": "^6.26.2",
+    "react-toastify": "^10.0.5",
+    "tailwindcss": "^3.4.13"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.11.1",
+    "@types/react": "^18.3.3",
+    "@types/react-dom": "^18.3.0",
+    "@vitejs/plugin-react-swc": "^3.5.0",
+    "eslint": "^9.11.1",
+    "eslint-plugin-react": "^7.37.1",
+    "eslint-plugin-react-hooks": "5.1.0-rc-fb9a90fa48-20240614",
+    "eslint-plugin-react-refresh": "^0.4.9",
+    "globals": "^15.9.0",
+    "typescript": "^5.5.3",
+    "typescript-eslint": "^8.8.0",
+    "vite": "^5.4.1"
+  }
+}

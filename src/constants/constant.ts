@@ -1,0 +1,1 @@
+export const STORAGE_KEY = 'TASK_MANGER_AUTH_TOKEN';
