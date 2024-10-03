@@ -22,12 +22,32 @@ export const fetchComments = createAsyncThunk(
   }
 );
 export const addComment = createAsyncThunk(
-    'comments/addComment',
-    async ({ projectId, taskId, content }: { projectId: string; taskId: string;  content: string }) => {
-      const response = await AdminCommentAPI.createComment(projectId, taskId, { content });
-      return response.data; 
+  "comments/addComment",
+  async ({
+    projectId,
+    taskId,
+    content,
+    parentId,
+  }: {
+    projectId: string;
+    taskId: string;
+    content: string;
+    parentId: string | null;
+  }) => {
+    const payload: { content: string; parent_id?: string } = { content };
+    if (parentId !== null) {
+      payload.parent_id = parentId;
     }
-  );
+
+    const response = await AdminCommentAPI.createComment(
+      projectId,
+      taskId,
+      payload
+    );
+    return response.data;
+  }
+);
+
 const commentsSlice = createSlice({
   name: "comments",
   initialState,

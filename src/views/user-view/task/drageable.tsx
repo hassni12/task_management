@@ -156,13 +156,14 @@ const TaskBoard: React.FC = () => {
   );
 
   const handleAddComment = useCallback(
-    async (newComment: string) => {
+    async (newComment: string, parentId: string | null = null) => {
       if (newComment.trim() && selectedTask) {
         await dispatch(
           addComment({
             projectId: selectedTask.project_id,
             taskId: selectedTask.id,
             content: newComment,
+            parentId,
           })
         ).then(() => {
           dispatch(

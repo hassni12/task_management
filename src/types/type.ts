@@ -267,9 +267,9 @@ export interface IAssignTask {
   assignee_id: number;
 }
 export interface IComment {
-  id: number;
+  id: string;
   parent_id: number | null;
-  user_id: number;
+  user_id: string;
   task_id: number;
   content: string;
   created_at: string;
