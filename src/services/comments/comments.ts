@@ -21,7 +21,7 @@ export const AdminCommentAPI = {
   updateComment: async (
     projectId: string,
     taskId: string,
-    commentId: number,
+    commentId: string,
     data: IUpdateComment
   ): Promise<AxiosResponse<IComment>> =>
     axiosInstance.put(`/v1/project/${projectId}/task/${taskId}/comment/${commentId}`, data),
@@ -29,7 +29,7 @@ export const AdminCommentAPI = {
   deleteComment: async (
     projectId: string,
     taskId: string,
-    commentId: number
+    commentId: string
   ): Promise<AxiosResponse<void>> =>
     axiosInstance.delete(`/v1/project/${projectId}/task/${taskId}/comment/${commentId}`),
 };

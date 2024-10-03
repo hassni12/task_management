@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import React, { useCallback, useMemo, useState } from "react";
 import {
   Modal,
   Input,
@@ -57,7 +57,7 @@ const TaskDetailsModal: React.FC<TaskDetailsModalProps> = ({
     setUpdateComment(comment.content);
   };
 
-  const handleConfirmUpdate = () => {
+  const handleConfirmUpdate = useCallback(() => {
     if (commentToEdit && selectedTask) {
       AdminCommentAPI.updateComment(
         selectedTask.project_id,
@@ -67,16 +67,21 @@ const TaskDetailsModal: React.FC<TaskDetailsModalProps> = ({
       )
         .then(() => {
           notification.success({ message: "Comment updated successfully!" });
-          dispatch(fetchComments({ projectId: selectedTask.project_id, taskId: selectedTask.id }));
+          dispatch(
+            fetchComments({
+              projectId: selectedTask.project_id,
+              taskId: selectedTask.id,
+            })
+          );
           resetCommentState();
         })
         .catch(() => {
           notification.error({ message: "Failed to update comment." });
         });
     }
-  };
+  }, [commentToEdit, dispatch, selectedTask, updateComment]);
 
-  const handleDeleteComment = (commentId: string) => {
+  const handleDeleteComment = useCallback((commentId: string) => {
     if (selectedTask) {
       Modal.confirm({
         title: "Delete Comment",
@@ -85,10 +90,21 @@ const TaskDetailsModal: React.FC<TaskDetailsModalProps> = ({
         okType: "danger",
         cancelText: "No",
         onOk: () => {
-          AdminCommentAPI.deleteComment(selectedTask.project_id, selectedTask.id, commentId)
+          AdminCommentAPI.deleteComment(
+            selectedTask.project_id,
+            selectedTask.id,
+            commentId
+          )
             .then(() => {
-              notification.success({ message: "Comment deleted successfully!" });
-              dispatch(fetchComments({ projectId: selectedTask.project_id, taskId: selectedTask.id }));
+              notification.success({
+                message: "Comment deleted successfully!",
+              });
+              dispatch(
+                fetchComments({
+                  projectId: selectedTask.project_id,
+                  taskId: selectedTask.id,
+                })
+              );
             })
             .catch(() => {
               notification.error({ message: "Failed to delete comment." });
@@ -96,7 +112,7 @@ const TaskDetailsModal: React.FC<TaskDetailsModalProps> = ({
         },
       });
     }
-  };
+  }, [dispatch, selectedTask]);
 
   const resetCommentState = () => {
     setIsEditing(false);
@@ -114,26 +130,31 @@ const TaskDetailsModal: React.FC<TaskDetailsModalProps> = ({
       {
         key: "1",
         label: "Subtasks",
-        children: subtasks.length > 0 ? (
-          <List
-            bordered
-            dataSource={subtasks}
-            renderItem={(subTask) => (
-              <List.Item>
-                <div className="flex flex-col w-full">
-                  <div className="flex justify-between">
-                    <h5 className="font-semibold">{subTask.name}</h5>
-                    <Tag color={statusColors[subTask.status]}>{subTask.status}</Tag>
+        children:
+          subtasks.length > 0 ? (
+            <List
+              bordered
+              dataSource={subtasks}
+              renderItem={(subTask) => (
+                <List.Item>
+                  <div className="flex flex-col w-full">
+                    <div className="flex justify-between">
+                      <h5 className="font-semibold">{subTask.name}</h5>
+                      <Tag color={statusColors[subTask.status]}>
+                        {subTask.status}
+                      </Tag>
+                    </div>
+                    <p className="text-gray-600">{subTask.description}</p>
+                    <p className="text-gray-500">
+                      Due: {new Date(subTask.created_at).toLocaleString()}
+                    </p>
                   </div>
-                  <p className="text-gray-600">{subTask.description}</p>
-                  <p className="text-gray-500">Due: {new Date(subTask.created_at).toLocaleString()}</p>
-                </div>
-              </List.Item>
-            )}
-          />
-        ) : (
-          <p>No subtasks available.</p>
-        ),
+                </List.Item>
+              )}
+            />
+          ) : (
+            <p>No subtasks available.</p>
+          ),
       },
       {
         key: "2",
@@ -156,17 +177,24 @@ const TaskDetailsModal: React.FC<TaskDetailsModalProps> = ({
                             rows={2}
                           />
                           <Space className="p-2">
-                            <Button type="primary" onClick={handleConfirmUpdate}>
+                            <Button
+                              type="primary"
+                              onClick={handleConfirmUpdate}
+                            >
                               Save
                             </Button>
-                            <Button onClick={() => setIsEditing(false)}>Cancel</Button>
+                            <Button onClick={() => setIsEditing(false)}>
+                              Cancel
+                            </Button>
                           </Space>
                         </>
                       ) : (
                         <>
                           <p>{item.content}</p>
                           <p>
-                            <em>{new Date(item.created_at).toLocaleString()}</em>
+                            <em>
+                              {new Date(item.created_at).toLocaleString()}
+                            </em>
                           </p>
                         </>
                       )}
@@ -181,7 +209,11 @@ const TaskDetailsModal: React.FC<TaskDetailsModalProps> = ({
                               <div>
                                 <p>{reply.content}</p>
                                 <p className="text-gray-400 text-xs">
-                                  <em>{new Date(reply.created_at).toLocaleString()}</em>
+                                  <em>
+                                    {new Date(
+                                      reply.created_at
+                                    ).toLocaleString()}
+                                  </em>
                                 </p>
                               </div>
                             </List.Item>
@@ -208,7 +240,9 @@ const TaskDetailsModal: React.FC<TaskDetailsModalProps> = ({
                             >
                               Add Reply
                             </Button>
-                            <Button onClick={() => setReplyingTo(null)}>Cancel</Button>
+                            <Button onClick={() => setReplyingTo(null)}>
+                              Cancel
+                            </Button>
                           </Space>
                         </div>
                       )}
@@ -216,13 +250,25 @@ const TaskDetailsModal: React.FC<TaskDetailsModalProps> = ({
 
                     {user?.id === item.user_id && (
                       <Space>
-                        <Button icon={<EditOutlined />} size="small" onClick={() => handleUpdateComment(item)} />
-                        <Button icon={<DeleteOutlined />} size="small" onClick={() => handleDeleteComment(item.id)} />
+                        <Button
+                          icon={<EditOutlined />}
+                          size="small"
+                          onClick={() => handleUpdateComment(item)}
+                        />
+                        <Button
+                          icon={<DeleteOutlined />}
+                          size="small"
+                          onClick={() => handleDeleteComment(item.id)}
+                        />
                       </Space>
                     )}
 
                     {replyingTo !== item.id && (
-                      <Button size="small" type="link" onClick={() => handleReplyClick(item.id)}>
+                      <Button
+                        size="small"
+                        type="link"
+                        onClick={() => handleReplyClick(item.id)}
+                      >
                         Reply
                       </Button>
                     )}
@@ -252,7 +298,20 @@ const TaskDetailsModal: React.FC<TaskDetailsModalProps> = ({
         ),
       },
     ],
-    [comments, newComment, replyText, subtasks, isEditing, commentToEdit, replyingTo]
+    [
+      subtasks,
+      comments,
+      newComment,
+      isEditing,
+      commentToEdit?.id,
+      updateComment,
+      handleConfirmUpdate,
+      replyingTo,
+      replyText,
+      user?.id,
+      onAddComment,
+      handleDeleteComment,
+    ]
   );
 
   return (
@@ -273,7 +332,8 @@ const TaskDetailsModal: React.FC<TaskDetailsModalProps> = ({
             <strong>Description:</strong> {selectedTask.description}
           </p>
           <p>
-            <strong>Due Date:</strong> {new Date(selectedTask.due_date).toLocaleDateString()}
+            <strong>Due Date:</strong>{" "}
+            {new Date(selectedTask.due_date).toLocaleDateString()}
           </p>
           <p>
             <strong>Status:</strong> {selectedTask.status}
@@ -282,12 +342,18 @@ const TaskDetailsModal: React.FC<TaskDetailsModalProps> = ({
             <strong>Assigned To:</strong> {selectedTask.assignee_id}
           </p>
           <p>
-            <strong>Created At:</strong> {new Date(selectedTask.created_at).toLocaleString()}
+            <strong>Created At:</strong>{" "}
+            {new Date(selectedTask.created_at).toLocaleString()}
           </p>
           <p>
-            <strong>Updated At:</strong> {new Date(selectedTask.updated_at).toLocaleString()}
+            <strong>Updated At:</strong>{" "}
+            {new Date(selectedTask.updated_at).toLocaleString()}
           </p>
-          <Collapse items={collapseItems} className="mt-4" defaultActiveKey={["2"]} />
+          <Collapse
+            items={collapseItems}
+            className="mt-4"
+            defaultActiveKey={["2"]}
+          />
         </div>
       )}
     </Modal>
