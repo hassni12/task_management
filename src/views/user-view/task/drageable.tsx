@@ -10,6 +10,7 @@ import {
   DeleteOutlined,
   EditOutlined,
   PlusCircleOutlined,
+  UserAddOutlined,
 } from "@ant-design/icons";
 import { useBoolean } from "../../../components/use-boolean";
 import CreateTaskModal from "./create-task";
@@ -23,6 +24,7 @@ import {
 import CustomModal from "../../../components/custom-modal";
 import DeleteButton from "../../../components/delete-button";
 import UpdateTaskModal from "./uodate-modal";
+import AssignTaskModal from "./assign-task";
 
 const statusColors: Record<TaskStatus, string> = {
   [TaskStatus.TODO]: "bg-blue-100 text-blue-800",
@@ -38,9 +40,14 @@ const TaskBoard: React.FC = () => {
   const isModalAssignVisible = useBoolean();
   const isDeleteModalVisible = useBoolean();
   const isModalUpdateVisible = useBoolean();
+  const isModalAssignUserVisible = useBoolean();
+  const { user } = useSelector((state: RootState) => state.auth);
+
   const dispatch = useDispatch<AppDispatch>();
   const { tasks } = useSelector((state: RootState) => state.task);
   const [task, setTask] = useState(tasks);
+  const [taskUser, setTaskUser] = useState("");
+
   const [selectedTask, setSelectedTask] = useState<ITask | null>(null);
   const [loadingBtn, setLoadingBtn] = useState(false);
   const [selectedId, setId] = useState("");
@@ -249,6 +256,17 @@ const TaskBoard: React.FC = () => {
                                   setTaskData(task);
                                 }}
                               />
+                              {user?.role === "admin" && (
+                                <Button
+                                  icon={<UserAddOutlined />}
+                                  size="small"
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    isModalAssignUserVisible.onTrue();
+                                    setTaskUser(task.id);
+                                  }}
+                                />
+                              )}{" "}
                             </Space>
                           </div>
                         </div>
@@ -297,6 +315,15 @@ const TaskBoard: React.FC = () => {
           projectId={id}
           visible={isModalUpdateVisible.value}
           onClose={isModalUpdateVisible.onFalse}
+        />
+      )}
+
+      {isModalAssignUserVisible.value && (
+        <AssignTaskModal
+          taskId={taskUser}
+          projectId={id}
+          visible={isModalAssignUserVisible.value}
+          onClose={isModalAssignUserVisible.onFalse}
         />
       )}
     </div>

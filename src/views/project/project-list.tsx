@@ -1,6 +1,7 @@
 import {
   DeleteOutlined,
   EditOutlined,
+  PicRightOutlined,
   PlusCircleOutlined,
   UsergroupAddOutlined,
 } from "@ant-design/icons";
@@ -15,11 +16,7 @@ import {
 } from "antd";
 import React, { useEffect, useState } from "react";
 import DeleteButton from "../../components/delete-button";
-import {
-  IProject,
-  IProjectUser,
-  IUpdateProject,
-} from "../../types/type";
+import { IProject, IProjectUser, IUpdateProject } from "../../types/type";
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../redux-store/store";
 import { fetchProjects } from "../../redux-store/slices/project";
@@ -30,6 +27,7 @@ import { AdminProjectAPI } from "../../services/admin/admin-api";
 import CreateProjectModal from "./create-project";
 import UpdateProjectModal from "./update-project";
 import AssignUsersModal from "./assign-user";
+import { useNavigate } from "react-router-dom";
 
 const ProjectList: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -42,6 +40,7 @@ const ProjectList: React.FC = () => {
   const [loadingBtn, setLoadingBtn] = useState(false);
   const [projectData, setProjectData] = useState<IUpdateProject>();
   const [projectDataAssign, setProjectDataAssign] = useState<IProject>();
+  const navigate = useNavigate();
 
   const { projects, loading, page, total, perPage } = useSelector(
     (state: RootState) => state.project,
@@ -63,6 +62,9 @@ const ProjectList: React.FC = () => {
         setId("");
         setLoadingBtn(false);
       });
+  };
+  const goToTask = (row: string): void => {
+    navigate(`/user/${row}/task`);
   };
   const columns: ColumnsType<IProject> = [
     {
@@ -128,6 +130,15 @@ const ProjectList: React.FC = () => {
               setId(row.id);
             }}
           />
+          <Space>
+            <Button
+              icon={<PicRightOutlined />}
+              onClick={() => {
+                goToTask(row.id);
+                // setProjectDataAssign(row);
+              }}
+            />
+          </Space>
         </Space>
       ),
     },

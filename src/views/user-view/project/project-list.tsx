@@ -6,15 +6,12 @@ import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../../redux-store/store";
 import { fetchProjects } from "../../../redux-store/slices/project";
 import { ColumnsType } from "antd/es/table";
-
-import { useBoolean } from "../../../components/use-boolean";
 import { fetchUserProjects } from "../../../redux-store/slices/user-project";
 import { useNavigate } from "react-router-dom";
 
 const ProjectList: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
-  const isModalAssignVisible = useBoolean();
 
   const { projects, loading, page, total, perPage } = useSelector(
     (state: RootState) => state.userProject,
@@ -71,9 +68,7 @@ const ProjectList: React.FC = () => {
           <Button
             icon={<PicRightOutlined />}
             onClick={() => {
-              isModalAssignVisible.onTrue();
               goToTask(row.id);
-              // setProjectDataAssign(row);
             }}
           />
         </Space>
