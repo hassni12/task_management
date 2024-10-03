@@ -49,7 +49,7 @@ export const tokenExpired = (exp: number) => {
   expiredTimer = setTimeout(() => {
     alert('Token expired');
 
-    sessionStorage.removeItem(STORAGE_KEY);
+    localStorage.removeItem(STORAGE_KEY);
 
     // window.location.href = paths.auth.jwt.login;
   }, timeLeft);
@@ -59,14 +59,14 @@ export const tokenExpired = (exp: number) => {
 
 export const setSession = (accessToken: string | null) => {
   if (accessToken) {
-    sessionStorage.setItem(STORAGE_KEY, accessToken);
+    localStorage.setItem(STORAGE_KEY, accessToken);
 
     axiosInstance.defaults.headers.common.Authorization = `Bearer ${accessToken}`;
 
     const { exp } = jwtDecode(accessToken); 
     tokenExpired(exp);
   } else {
-    sessionStorage.removeItem(STORAGE_KEY);
+    localStorage.removeItem(STORAGE_KEY);
 
     delete axiosInstance.defaults.headers.common.Authorization;
   }

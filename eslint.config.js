@@ -2,7 +2,7 @@ import globals from "globals";
 import pluginJs from "@eslint/js";
 import tseslint from "typescript-eslint";
 import pluginReact from "eslint-plugin-react";
-import pluginReactHooks from "eslint-plugin-react-hooks"; // Import react-hooks
+import pluginReactHooks from "eslint-plugin-react-hooks"; 
 
 export default [
   { files: ["**/*.{js,mjs,cjs,ts,jsx,tsx}"] },
@@ -22,37 +22,28 @@ export default [
   pluginReact.configs.flat.recommended,
   {
     rules: {
-      // Basic JavaScript rules
-      "no-console": "warn", // Warn on console.log statements
-      eqeqeq: ["error", "always"], // Enforce === and !==
-      // quotes: ["error", "single"], // Enforce single quotes
-      semi: ["error", "always"], // Enforce semicolons
+      "no-console": "warn",
+      eqeqeq: ["error", "always"], 
+      semi: ["error", "always"],
 
-      // TypeScript rules
-      "@typescript-eslint/no-explicit-any": "warn", // Warn against using any type
-      "@typescript-eslint/explicit-function-return-type": "off", // Disable requiring return types for functions
+      "@typescript-eslint/no-explicit-any": "warn",
+      "@typescript-eslint/explicit-function-return-type": "off", 
       "@typescript-eslint/no-unused-vars": [
         "error",
         { argsIgnorePattern: "^_" },
-      ], // Disallow unused variables, allow underscore prefix
-      // "@typescript-eslint/explicit-module-boundary-types": "warn", // Warn on missing return types for exported functions and classes
-
-      // React rules
-      "react/react-in-jsx-scope": "off", // Disable for React 17+
-      "react/prop-types": "off", // Disable prop-types since we use TypeScript
-      "react/jsx-boolean-value": ["error", "never"], // Enforce the use of boolean attributes
+      ], 
+      "react/react-in-jsx-scope": "off", 
+      "react/prop-types": "off",
+      "react/jsx-boolean-value": ["error", "never"], 
       "react/jsx-filename-extension": [
         "error",
         { extensions: [".jsx", ".tsx"] },
-      ], // Limit file extensions for JSX
-      "react/no-array-index-key": "warn", // Warn on using array index as a key in lists
-      "react/no-unused-prop-types": "warn", // Warn about unused prop types
+      ], 
+      "react/no-array-index-key": "warn",
+      "react/no-unused-prop-types": "warn", 
+      "react-hooks/rules-of-hooks": "error", 
+      "react-hooks/exhaustive-deps": "warn",
 
-      // Additional rules
-      "react-hooks/rules-of-hooks": "error", // Checks rules of Hooks
-      "react-hooks/exhaustive-deps": "warn", // Checks effect dependencies
-
-      // You can add more rules as necessary
     },
   },
   {

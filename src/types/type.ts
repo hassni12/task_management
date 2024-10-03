@@ -4,9 +4,24 @@ export enum UserRole {
 }
 export enum TaskStatus {
   TODO = "todo",
-  IN_PROGRESS = "in-progress",
-  DONE = "done",
+  IN_PROCESS = "in-progress",
+  TESTING = "testing",
+  HOLD = "hold",
+  COMPLETED = "completed",
 }
+export interface Task {
+  id: string;
+  parent_id: number | null;
+  project_id: number;
+  name: string;
+  description: string;
+  due_date: string;
+  assignee_id: number;
+  status: TaskStatus;
+  created_at: string;
+  updated_at: string;
+}
+
 export enum UserStatus {
   Active = 1,
   Inactive = 0,
@@ -16,21 +31,25 @@ export type IAuthLogin = {
   password: string;
 };
 export type IAuthRegisterUser = {
+  id?: string;
   name: string;
   email: string;
   password: string;
   role?: UserRole;
+  is_active?: UserStatus;
 };
+
 export type IUser = {
-  id: number;
+  id: string;
   name: string;
   email: string;
   email_verified_at: string | null;
-  role: string;
+  role: UserRole;
   profile: string | null;
-  is_active: number;
+  is_active: UserStatus;
   created_at: string;
   updated_at: string;
+  password: string;
 };
 
 export type IAuthLoginRegisterResponse = {
@@ -41,24 +60,30 @@ export type IAuthLoginRegisterResponse = {
   errors: any[];
 };
 
-export interface IAdminUserResponse {
-  id: number;
+export interface IAdminUser {
+  id: string;
   name: string;
   email: string;
-  email_verified_at: string | null;
+  email_verified_at?: string | null;
   role?: UserRole;
-  profile: string | null;
-  is_active: UserStatus;
-  created_at: string;
-  updated_at: string;
+  profile?: string | null;
+  is_active?: UserStatus;
+  created_at?: string;
+  updated_at?: string;
+  password: string;
 }
-
+export interface IAdminUserResponse {
+  data: IAdminUser[];
+  total: number;
+  current_page: number;
+  per_page: number;
+}
 export interface IAdminUserCreate {
   name: string;
   email: string;
   password: string;
   role?: UserRole;
-  is_active: UserStatus;
+  is_active?: UserStatus;
 }
 
 export interface IAdminUserUpdate {
@@ -86,7 +111,7 @@ export interface IProjectUser {
 }
 
 export interface IProject {
-  id: number;
+  id: string;
   name: string;
   description: string;
   icon: string | null;
@@ -94,6 +119,15 @@ export interface IProject {
   created_at: string;
   updated_at: string;
   users: IProjectUser[];
+  total: number;
+  current_page: number;
+  per_page: number;
+}
+export interface IProjectResponse {
+  data: IProject[];
+  total: number;
+  current_page: number;
+  per_page: number;
 }
 
 export interface ICreateProject {
@@ -103,6 +137,7 @@ export interface ICreateProject {
 }
 
 export interface IUpdateProject {
+  id?: string;
   name?: string;
   description?: string;
   is_active?: UserStatus;
@@ -134,7 +169,7 @@ export interface IProjectUserResponse {
   name: string;
   description: string;
   icon: string | null;
-  is_active: boolean;
+  is_active: UserStatus;
   created_at: string;
   updated_at: string;
   users: IProjectUser[];
@@ -181,4 +216,72 @@ export interface ITaskPayload {
 
 export interface IAssignPayload {
   assignee_id: string;
+}
+export interface Column {
+  title: string;
+  is_show: boolean;
+  dataIndex?: string;
+  key: string;
+  sorter?: boolean;
+  render?: (value: any, row: IProjectUserResponse) => React.ReactNode;
+}
+
+export interface ITask {
+  id: string;
+  parent_id: number | null;
+  project_id: string;
+  name: string;
+  description: string;
+  due_date: string;
+  assignee_id: number | null;
+  status: TaskStatus;
+  created_at: string;
+  updated_at: string;
+  subtasks?: ITask[];
+  comments?: string[];
+}
+
+export interface ITaskResponse {
+  data: ITask[];
+  total: number;
+  page: number;
+  per_page: number;
+}
+
+export interface ICreateTask {
+  parent_id?: number;
+  name: string;
+  description: string;
+  due_date: string;
+  status: TaskStatus;
+}
+
+export interface IUpdateTask {
+  name?: string;
+  description?: string;
+  due_date?: string;
+  status?: TaskStatus;
+}
+
+export interface IAssignTask {
+  assignee_id: number;
+}
+export interface IComment {
+  id: number;
+  parent_id: number | null;
+  user_id: number;
+  task_id: number;
+  content: string;
+  created_at: string;
+  updated_at: string;
+  replies: IComment[];
+}
+
+export interface ICreateComment {
+  parent_id?: string; 
+  content: string;
+}
+
+export interface IUpdateComment {
+  content: string;
 }

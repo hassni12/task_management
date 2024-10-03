@@ -1,17 +1,10 @@
 import React, { useState } from "react";
 import { LockOutlined, MailOutlined, UserOutlined } from "@ant-design/icons";
-import {
-  Card,
-  Form,
-  Input,
-  Button,
-  Typography,
-  notification,
-} from "antd";
+import { Card, Form, Input, Button, Typography, notification } from "antd";
 import { Link, useNavigate } from "react-router-dom";
 import { AuthAPI } from "../../services/auth/auth-api";
-import { IAuthRegisterUser } from "../../types/services-type";
-import { setSession } from "../../utils/jwt-utils";
+import { IAuthRegisterUser } from "../../types/type";
+import { STORAGE_KEY } from "../../constants/constant";
 
 const { Title } = Typography;
 
@@ -29,7 +22,7 @@ const Register: React.FC = () => {
     setLoading(true);
     AuthAPI.register(body)
       .then((res) => {
-        console.log(res.data.token)
+        localStorage.setItem(STORAGE_KEY, res.data.token);
         // setSession(res.data.data.token);
         notification.success({ message: "Registration successful!" });
         form.resetFields();
@@ -97,7 +90,7 @@ const Register: React.FC = () => {
                   message: "Please input your password!",
                 },
                 {
-                  min: 8, 
+                  min: 8,
                   message: "Password must be at least 8 characters long!",
                 },
               ]}

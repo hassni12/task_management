@@ -3,13 +3,23 @@ import { LockOutlined, MailOutlined } from "@ant-design/icons";
 import { Card, Form, Input, Button, Typography, notification } from "antd";
 import { Link } from "react-router-dom";
 import { AuthAPI } from "../../services/auth/auth-api";
-import { setSession } from "../../utils/jwt-utils";
-import { IAuthLogin } from "../../types/services-type";
+import { IAuthLogin } from "../../types/type";
+import { STORAGE_KEY } from "../../constants/constant";
+import { setUserData } from "../../redux-store/slices/auth";
+import { useDispatch } from "react-redux";
+import { useSearchParams } from "../../components/use-search-params";
+import { useRouter } from "../../components/use-router";
+import { PATH_AFTER_LOGIN } from "../../config-global";
 
 const { Title } = Typography;
 
 const Login: React.FC = () => {
   const [form] = Form.useForm();
+  const dispatch = useDispatch();
+  const router = useRouter();
+
+  const searchParams = useSearchParams();
+  const returnTo = searchParams.get("returnTo");
   const [loading, setLoading] = useState(false);
 
   const handleLogin = (values: IAuthLogin) => {
@@ -20,8 +30,9 @@ const Login: React.FC = () => {
     setLoading(true);
     AuthAPI.login(body)
       .then((res) => {
-        console.log(res?.data?.token)
-        // setSession(res.data.token);
+        localStorage.setItem(STORAGE_KEY, res?.data?.token);
+        dispatch(setUserData(res?.data?.user));
+        router.push(returnTo || PATH_AFTER_LOGIN);
         notification.success({ message: "Login successful!" });
         form.resetFields();
       })

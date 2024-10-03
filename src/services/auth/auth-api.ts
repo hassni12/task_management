@@ -1,4 +1,4 @@
-import { IAuthLogin, IAuthLoginRegisterResponse, IAuthRegisterUser } from "../../types/services-type";
+import { IAuthLogin, IAuthLoginRegisterResponse, IAuthRegisterUser } from "../../types/type";
 import axiosInstance from "../../utils/axios";
 import { AxiosResponse } from "axios";
 

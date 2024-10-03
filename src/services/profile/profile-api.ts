@@ -1,4 +1,4 @@
-import { IProfileResponse, IProfileUpdate } from "../../types/services-type";
+import { IProfileResponse, IProfileUpdate } from "../../types/type";
 import axiosInstance from "../../utils/axios";
 import { AxiosResponse } from "axios";
 export const ProfileAPI = {
