@@ -29,7 +29,7 @@ const CustomModal: React.FC<CustomModalProps> = ({
     >
       <h2 className="text-xl font-semibold p-2">{title}</h2>
       {subTitle && (
-        <h3 className="text-md text-gray-600 p-2">{subTitle}</h3> // Subtitle styling
+        <h3 className="text-md text-gray-600 p-2">{subTitle}</h3>
       )}
       <div className="flex justify-end mb-1">
         <Button

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Modal, Select, Form, notification } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../redux-store/store";
-import { clearAllUsers, fetchUsers } from "../../redux-store/slices/users"; // Adjust the path as needed
+import { clearAllUsers, fetchUsers } from "../../redux-store/slices/users";
 import { AdminProjectAPI } from "../../services/admin/admin-api";
 import { fetchProjects } from "../../redux-store/slices/project";
 import { IAssignUsers, IProject } from "../../types/type";
@@ -37,7 +37,7 @@ const AssignUsersModal: React.FC<IAssignUsersModalProps> = ({
       .validateFields()
       .then((values) => {
         setLoadingBtn(true);
-        AdminProjectAPI.assignUsersToProject(project?.id ??'', values)
+        AdminProjectAPI.assignUsersToProject(project?.id ?? "", values)
           .then(() => {
             notification.success({
               message: "Users Assigned",
@@ -77,9 +77,13 @@ const AssignUsersModal: React.FC<IAssignUsersModalProps> = ({
       cancelText="Cancel"
       confirmLoading={loadingBtn}
     >
-      <Form form={form} layout="vertical" initialValues={{
-        user_ids: project?.users.map((user) => user.id)
-      }}>
+      <Form
+        form={form}
+        layout="vertical"
+        initialValues={{
+          user_ids: project?.users.map((user) => user.id),
+        }}
+      >
         <Form.Item
           name="user_ids"
           label="Select Users"
@@ -92,8 +96,8 @@ const AssignUsersModal: React.FC<IAssignUsersModalProps> = ({
             loading={loading}
             onPopupScroll={handleScroll}
           >
-            {allUsers.map((user, index) => (
-              <Select.Option key={index} value={user.id}>
+            {allUsers.map((user) => (
+              <Select.Option key={user.id} value={user.id}>
                 {user.name}
               </Select.Option>
             ))}

@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { Form, Input, Button, Select, Switch } from "antd";
 import { notification } from "antd";
 import { useState } from "react";
-import {  IProfileUpdate } from "../../types/type";
+import { IProfileUpdate } from "../../types/type";
 import { AppDispatch, RootState } from "../../redux-store/store";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchProfile } from "../../redux-store/slices/profile";
@@ -36,7 +36,7 @@ const ProfileUpdate: React.FC = () => {
   const handleFinish = async (values: IProfileUpdate) => {
     setLoading(true);
     ProfileAPI.updateProfile(values)
-      .then((res) => {
+      .then(() => {
         notification.success({ message: "update successful!" });
         fetchProfile();
       })
@@ -81,7 +81,6 @@ const ProfileUpdate: React.FC = () => {
           label="Password"
           name="password"
           rules={[
-            // { required: true, message: "Please input your password!" },
             { min: 8, message: "Password must be at least 8 characters long!" },
           ]}
         >

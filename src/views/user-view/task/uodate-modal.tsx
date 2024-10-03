@@ -47,20 +47,23 @@ const UpdateTaskModal: React.FC<{
         };
 
         setLoading(true);
-        AdminTaskAPI.updateTask(projectId, task?.id, formattedTask)
-          .then(() => {
-            if (projectId) {
-              dispatch(fetchTasks({ projectId }));
-            }
-            notification.success({
-              message: "Task updated successfully!",
+
+        if (projectId && task) {
+          AdminTaskAPI.updateTask(projectId, task?.id, formattedTask)
+            .then(() => {
+              if (projectId) {
+                dispatch(fetchTasks({ projectId }));
+              }
+              notification.success({
+                message: "Task updated successfully!",
+              });
+            })
+            .finally(() => {
+              form.resetFields();
+              onClose();
+              setLoading(false);
             });
-          })
-          .finally(() => {
-            form.resetFields();
-            onClose();
-            setLoading(false);
-          });
+        }
       })
       .catch((info) => {
         console.error("Validate Failed:", info);

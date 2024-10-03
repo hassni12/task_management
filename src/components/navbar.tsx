@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Layout, Dropdown, Avatar, Button, message } from "antd";
+import React from "react";
+import { Layout, Dropdown, Avatar, message } from "antd";
 import { useLocation, useNavigate } from "react-router-dom";
 import { DownOutlined } from "@ant-design/icons";
 import { useDispatch, useSelector } from "react-redux";
@@ -27,7 +27,7 @@ const Navbar: React.FC = () => {
         navigate(paths.auth.jwt.login);
         message.success("Logged out successfully");
       })
-      .catch((error) => {
+      .catch(() => {
         message.error("Logout failed");
       })
       .finally(() => {});
